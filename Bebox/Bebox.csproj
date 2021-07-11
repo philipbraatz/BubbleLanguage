@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="obj\Debug\netcoreapp2.1\BubblesBaseListener.cs" />
+    <Compile Include="obj\Debug\netcoreapp2.1\BubblesBaseVisitor.cs" />
+    <Compile Include="obj\Debug\netcoreapp2.1\BubblesLexer.cs" />
+    <Compile Include="obj\Debug\netcoreapp2.1\BubblesListener.cs" />
+    <Compile Include="obj\Debug\netcoreapp2.1\BubblesParser.cs" />
+    <Compile Include="obj\Debug\netcoreapp2.1\BubblesVisitor.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Antlr4.CodeGenerator" Version="4.6.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Antlr4.Runtime" Version="4.6.6" />
+  </ItemGroup>
+
+</Project>
