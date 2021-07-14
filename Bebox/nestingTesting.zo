@@ -1,0 +1,25 @@
+﻿space Outside{
+	class IdomuchThings{
+		function IdotheThing{
+		}
+		function IdoOtherthing{
+		}
+		function IdoOtherOtherthing{
+		}
+	}
+
+	Function Main{
+		Istarthereguys
+	}
+
+	space LetsGetdeep{
+		function HowDeep{
+		}
+		class Howdeepclass{
+			function thisDeepClass{
+			}
+			function thisIsnotDeep{
+			}
+		}
+	}
+}

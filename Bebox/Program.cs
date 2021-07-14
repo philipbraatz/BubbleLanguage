@@ -15,7 +15,7 @@ namespace Bebox
         {
             Console.WriteLine("Loading Test file");
             StreamReader reader = new StreamReader(
-                @"C:\Users\Doorfail.WINDOWSPC\source\repos\BubbleLanguage\Bebox\helloWord.zo");
+                @"C:\Users\Doorfail.WINDOWSPC\source\repos\BubbleLanguage\Bebox\nestingTesting.zo");
             string file = reader.ReadToEnd().ToLower();
             AntlrInputStream antlrStream = new AntlrInputStream(file);
             BubblesLexer lexer = new BubblesLexer(antlrStream);
@@ -24,11 +24,17 @@ namespace Bebox
 
             IParseTree tree = parser.file();
 
-            Bubble calculator = new Bubble();
-            var output = calculator.Visit(tree);
+            FileParser fileParser = new FileParser();
+            BoxParser boxParser = new BoxParser();
+            var output = fileParser.Visit(tree);
+            var box = boxParser.Visit(tree);
 
-            Console.WriteLine("--RESULT--\n\n" + output);
-            Console.WriteLine(tree.ToStringTree());
+            if (box != null)
+                Console.WriteLine("--Cooler Results--\n\n" + box.ToString());
+            else
+                Console.WriteLine("Error: Bad BoxParser\n\n");
+
+            Console.WriteLine("--Just Everything as a mess--\n\n" + tree.ToStringTree());
             Console.Read();
         }
     }

@@ -8,11 +8,11 @@ grammar Bubbles;
  */
 scope_type: PUBLIC | PRIVATE | INTERNAL;
 
-bubble_type : SPACE | CLASS | INTERFACE | FUNCTION;
+bubble_type : SPACE | CLASS | INTERFACE | FUNCTION | CONSTRUCTOR;
 
 as_type : 'as' (STATIC | EVENT | ASYNC);
 
-file : bubble_decleration* EOF;
+file : space_decleration* EOF;
 
 /*
 Space MyNamespace: 
@@ -33,11 +33,36 @@ using
 	}
 }
 */
-bubble_decleration : 
-	scope_type? bubble_type? NAME?
+
+
+space_decleration : 	
+	scope_type? SPACE NAME?
 	(':' structure? imports )? (as_type (',' as_type)*)? '{' 
-		   (code_lines | bubble_decleration | function )*
+		   (space_decleration | class_decleration | interface_decleration | function_decleration)*
 	'}';
+
+class_decleration :
+	scope_type? CLASS NAME
+	(':' structure? imports )? (as_type (',' as_type)*)? '{' 
+		   (constructor_bubble | property_bubble | methods_bubble )*
+	'}';
+	
+interface_decleration :
+	scope_type? INTERFACE NAME
+	(':' structure? imports )? (as_type (',' as_type)*)? '{' 
+		   (constructor_bubble | property_bubble | methods_bubble )*
+	'}';
+
+function_decleration :
+	scope_type? FUNCTION NAME
+	(':' structure? imports )? (as_type (',' as_type)*)? '{' 
+		   code_lines?
+	'}';
+
+constructor_bubble : CONSTRUCTOR NAME? '{' '}';
+property_bubble: scope_type PROPERTY NAME? as_type? '{' '}';
+methods_bubble: scope_type METHOD NAME? as_type? '{' '}';
+	
 
 /*scope_bubble: scope_type '{' (bubble_decleration | )* '}';*/
 function: FUNCTION structure? NAME parameters? (':'code_line | '{' (code_lines)? '}');
@@ -65,15 +90,19 @@ CLASS : 'class' | 'cl';
 FUNCTION : 'function' | 'func' |'fn';
 INTERFACE: 'interface' | 'it';
 
+CONSTRUCTOR: 'constructor' | 'con' | 'init' | 'initialize' | 'initializer';
+METHOD: 'methods' | 'functions' | 'funcs';
+PROPERTY: 'properties' | 'property' | 'prop';
+
 PUBLIC: 'public' | 'pub';
-PRIVATE: 'private' | 'prv';
-INTERNAL: 'internal' | 'inn';
+PRIVATE: 'private' | 'pvt';
+INTERNAL: 'internal' | 'inl';
 
 STATIC: 'static' | 'tic';
 EVENT: 'event' | 'ent';
 ASYNC: 'asyncronous' | 'async' | 'ac';
 
-USING: 'using';
+USING: 'using' | 'use';
 FROM: 'FROM';
 
 

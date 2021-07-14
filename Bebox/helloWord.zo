@@ -4,6 +4,7 @@ using CoolLibrary,SystemLibrary
 {
 	Public fn Main {
 		ThisIsTheStartOfMyProgram
+		canItEgg
 
 		func ExecuteMeFunction(){ 
 			LookAtThisText
@@ -12,5 +13,21 @@ using CoolLibrary,SystemLibrary
 
 	Public space SubSpace : Using CoolLibrary.CoolStuff {
 		HelloWorld.print
+	}
+
+	Private space space1{
+		private space space2{
+			private class class3{
+				private function myFunc4{
+				}
+			}
+		}
+
+		private space cool2{
+			private class cool3{
+				private function funcool4{
+				}
+			}
+		}
 	}
 }
