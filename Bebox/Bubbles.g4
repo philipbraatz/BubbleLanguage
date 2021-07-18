@@ -54,8 +54,8 @@ interface_decleration :
 	'}';
 
 function_decleration :
-	scope_type? FUNCTION NAME
-	(':' structure? imports )? (as_type (',' as_type)*)? '{' 
+	scope_type? return_values? FUNCTION NAME
+	(':' structure? imports )? '(' (param (',' param)*)? ')' '{' 
 		   code_lines?
 	'}';
 
@@ -64,19 +64,22 @@ property_bubble: scope_type PROPERTY NAME? as_type? '{' '}';
 methods_bubble: scope_type METHOD NAME? as_type? '{' '}';
 	
 
-/*scope_bubble: scope_type '{' (bubble_decleration | )* '}';*/
-function: FUNCTION structure? NAME parameters? (':'code_line | '{' (code_lines)? '}');
-
-structure:  ('<' NAME (','NAME)* '>');
+structure:  '<' NAME (','NAME)* '>';
 imports: (USING | FROM) import_name (','import_name)*;
 import_name: class_name ('#'  NAME)?;
 parameters: '('((param',')* param)?')';
 param: NAME NAME ('=' NAME)?;
+return_values: ('[' NAME (','NAME)* ']') | NAME;
 
 class_name: NAME ('.' NAME)*;
-code_line: class_name;
+code_line: expression;
 code_lines: code_line+;
 
+expression: 
+	expression (MULT | DIVIDE) expression
+	| expression (ADD | SUB) expression
+	| class_name
+	;
 
 /*
  * Lexer Rules
@@ -84,6 +87,9 @@ code_lines: code_line+;
  /*
  */
 WS  : (' '|'\t'|'\r'|'\n')+ -> skip;
+
+
+/*Bubbles*/
 
 SPACE : 'space' | 'namespace' | 'sp';
 CLASS : 'class' | 'cl';
@@ -102,8 +108,59 @@ STATIC: 'static' | 'tic';
 EVENT: 'event' | 'ent';
 ASYNC: 'asyncronous' | 'async' | 'ac';
 
+/*End Bubbles*/
+
 USING: 'using' | 'use';
 FROM: 'FROM';
+
+/*Operators*/
+
+/*equality*/
+EQUAL: '==';/*Normally equality*/
+NOT_EQUAL: '!=' | '<>';
+SAME:'===';/*are these the same instance of object*/
+NOT_SAME: '!==' | '=!=';
+LEFT_GREATER: '<';
+RIGHT_GREATER: '>';
+LEFT_EQUAL_GREATER: '<=';
+RIGHT_EQUAL_GREATER: '>=';
+IS_TYPE: 'is';
+
+/*Assignment*/
+ASSIGN: '=';
+INC_ASSIGN: '+=';
+DEC_ASSIGN: '-=';
+MULT_ASSIGN: '*=';
+DIVIDE_ASSIGN: '/=';
+INVERT_ASSIGN: '!!=';
+
+/*Logic*/
+NOT: '!' | 'not';
+AND: '&&' | 'and';
+OR: '||' | 'or';
+NAND: '!&&' | 'nand';
+XOR: 'x||' | 'xor';
+NOR: '!||' | 'nor';
+
+/*Math*/
+INC: '++';
+DEC: '--';
+
+ADD: '+';
+SUB: '-';
+MULT: '*';
+DIVIDE: '/';
+MOD: '%' | 'mod' | 'remainder';
+POWER: '^';
+
+/*Nullablity*/
+SKIP_IF_NULL: '?';
+IF_NULL: '??';
+
+INLINE_IF: '?=';
+INLINE_ELSE: '|=';
+
+/*End Operators*/
 
 
 fragment NONZERONUM : [1-9];
@@ -125,3 +182,4 @@ NUMBER
 
 NAME : [a-z] ([a-z] | [0-9])*;
 
+STRING: '"' .*? '"';

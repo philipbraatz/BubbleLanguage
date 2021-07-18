@@ -51,7 +51,7 @@ namespace Bebox
                         if ("class" == text)
                             return (Type)(object)BubbleType.CLASS;
                         if ("code" == text)
-                            return (Type)(object)BubbleType.CODE;
+                            return (Type)(object)BubbleType.FILE;
                         if (Function.Contains(text))
                             return (Type)(object)BubbleType.FUNCTION;
                         if (Internal.Contains(text))
@@ -68,8 +68,9 @@ namespace Bebox
 
         public override Box VisitFile([NotNull] BubblesParser.FileContext context)
         {
-            List<object> inside = new List<object>(context.space_decleration().Select(s => VisitSpace_decleration(s)));
-            Box b = new Box("Root", inside, BubbleType.CODE);
+            Box b = new Box("Root", null, BubbleType.FILE);
+            parent = b;
+            b.Inside = new List<object>(context.space_decleration().Select(s => VisitSpace_decleration(s)));
             return b;
         }
 
@@ -79,10 +80,10 @@ namespace Bebox
             bool isClass = context.class_decleration().Length > 0;
             bool isInterface = context.interface_decleration().Length > 0;
 
-            Box result = result = new Box(
+            Box result = new Box(
                     context.NAME().GetText(),
                     null,
-                    isSpace?BubbleType.SPACE:isClass?BubbleType.CLASS:isInterface?BubbleType.INTERFACE:BubbleType.CODE,
+                    BubbleType.SPACE,
                     BoxParser.GetEnum<ScopeType>(context.scope_type())); ;
             parent = result;
 
@@ -105,18 +106,76 @@ namespace Bebox
                     ).ToList());
             }
 
-
+            parent = result;
             return result;
         }
 
         public override Box VisitClass_decleration([NotNull] BubblesParser.Class_declerationContext context)
         {
-            return base.VisitClass_decleration(context);
+            var type = context.scope_type();
+
+            bool isProperty = context.property_bubble().Length > 0;
+            bool isMethod = context.methods_bubble().Length > 0;
+            bool isConstructor = context.constructor_bubble().Length > 0;
+
+            Class result = new Class(new Space(parent),context.NAME().GetText(), Box.GetScope(context.scope_type()));
+            parent = result;
+
+            if (isProperty)
+            {
+                result.Inside = new List<object>(context.property_bubble().Select(c =>
+                       VisitProperty_bubble(c)
+                    ).ToList());
+            }
+            else if (isMethod)
+            {
+                result.Inside = new List<object>(context.methods_bubble().Select(c =>
+                        VisitMethods_bubble(c)
+                    ).ToList());
+            }
+            else if (isConstructor)
+            {
+                result.Inside = new List<object>(context.constructor_bubble().Select(c =>
+                       VisitConstructor_bubble(c)
+                    ).ToList());
+            }
+
+            parent = result;
+            return result;
         }
 
         public override Box VisitInterface_decleration([NotNull] BubblesParser.Interface_declerationContext context)
         {
-            return base.VisitInterface_decleration(context);
+            var type = context.scope_type();
+
+            bool isProperty = context.property_bubble().Length > 0;
+            bool isMethod = context.methods_bubble().Length > 0;
+            bool isConstructor = context.constructor_bubble().Length > 0;
+
+            Interface result = new Interface(new Space(parent), context.NAME().GetText(), Box.GetScope(context.scope_type()));
+            parent = result;
+
+            if (isProperty)
+            {
+                result.Inside = new List<object>(context.property_bubble().Select(c =>
+                       VisitProperty_bubble(c)
+                    ).ToList());
+            }
+            else if (isMethod) 
+            {
+                result.Inside = new List<object>(context.methods_bubble().Select(c =>
+                        VisitMethods_bubble(c)
+                    ).ToList());
+            }
+            else if (isConstructor)
+            {
+                result.Inside = new List<object>(context.constructor_bubble().Select(c =>
+                       VisitConstructor_bubble(c)
+                    ).ToList());
+            }
+
+            parent = result;
+            return result;
         }
 
         public override Box VisitFunction([NotNull] BubblesParser.FunctionContext context)
@@ -124,6 +183,20 @@ namespace Bebox
             return new Function(parent, context.NAME().GetText(), null, parent.Scope);
         }
 
+        public override Box VisitProperty_bubble([NotNull] BubblesParser.Property_bubbleContext context)
+        {
+            return new PropertyArea(parent, context.NAME().GetText(), Box.GetScope(context.scope_type()));
+        }
 
+        public override Box VisitMethods_bubble([NotNull] BubblesParser.Methods_bubbleContext context)
+        {
+            Method
+            return new Function(parent,context.NAME().GetText(),context.,Box.GetScope(context.scope_type()));
+        }
+
+        public override Box VisitConstructor_bubble([NotNull] BubblesParser.Constructor_bubbleContext context)
+        {
+
+        }
     }
 }

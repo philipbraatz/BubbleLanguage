@@ -34,7 +34,7 @@ namespace Bebox
             else if (context.FUNCTION() != null)
                 return BubbleType.FUNCTION;
             else
-                return BubbleType.CODE;
+                return BubbleType.FILE;
         }
     }
 }
