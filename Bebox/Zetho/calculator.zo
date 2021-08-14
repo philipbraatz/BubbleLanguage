@@ -1,0 +1,41 @@
+﻿space Tropical{
+	space SmartCalculator{
+
+		func Main: as static{
+			doGoodMath
+			one + two
+		}
+
+		public class CalculatorInterface : from BasicMaths{
+			public Constructor{
+				con{
+					startupthing
+					a / bees
+				}
+			}
+
+			private Properties{
+				alphabetsoop: macaroni
+				alphabetsoop: mini * machinegun
+			}
+
+			public Properties{
+				
+			}
+			
+			private Methods fred{
+			}
+
+			public Methods{
+				function Add2NumbersTogether(int mytest, int mypants){
+					returnaplusb
+				}
+			}
+
+		}
+
+		public class BasicMath{
+		
+		}
+	}
+}

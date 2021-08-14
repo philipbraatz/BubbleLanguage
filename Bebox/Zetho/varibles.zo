@@ -1,0 +1,17 @@
+﻿space Testing{
+	class Test{
+		public Methods{
+			num function getNumFive (){
+					return five
+				}
+			void function thisPlusOne (int aVar){
+					avar1 + 1
+				}
+			[num, alsonum] function addTogether(int avar, int bvar){
+				avar2
+				return moretextcuzImcool
+				return likethat
+			}
+		}
+	}
+}

@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 using Antlr4.Runtime;
-using static Bebox.BubblesParser;
+using static Doorfail.Bebox.BubblesParser;
 
-namespace Bebox
+namespace Doorfail.Bebox
 {
     public static class Alternative
     {
@@ -15,8 +15,8 @@ namespace Bebox
                 return ScopeType.PUBLIC;
             if (context.PRIVATE() != null)
                 return ScopeType.PRIVATE;
-            else if (context.INTERNAL() != null)
-                return ScopeType.INTERNAL;
+            else if (context.PROTECTED() != null)
+                return ScopeType.PROTECTED;
             else
                 return ScopeType.PUBLIC;
         }

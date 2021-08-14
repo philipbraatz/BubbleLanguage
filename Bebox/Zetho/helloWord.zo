@@ -1,0 +1,44 @@
+
+Space Testing:
+using CoolLibrary,SystemLibrary
+	as Static
+{
+	Space TouchMe{
+		Public function Main {
+			ThisIsTheStartOfMyProgram
+			canItEgg
+		}
+
+		Public space SubSpace : Using CoolLibrary.CoolStuff {
+		}
+
+		Private space space1{
+			private space space2{
+				private class class3{
+					public methods{
+						private function myFunc4{
+						}
+					}
+				}
+			}
+
+			private space cool2{
+				private class cool3{
+					public methods{
+						private function funcool4{
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+Space IAmaspaceman{
+	class lonelyboy{
+		public methods{
+			private function fun{
+			}
+		}
+	}
+}

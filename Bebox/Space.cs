@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using static Bebox.BubblesParser;
 
-namespace Bebox
+namespace Doorfail.Bebox
 {
     
     public class Space : Box
@@ -15,21 +14,45 @@ namespace Bebox
 
         public Space(Box b) : base(b, new List<BubbleType> { BubbleType.SPACE, BubbleType.FILE }){}
 
-        public Space(Space space,string name, ScopeType scope = 0)
-            : base(space, name,new List<object>(), BubbleType.SPACE, scope)
-        =>space.GetType();
+        public Space(Box space, string name, ScopeType scope = 0)
+            :
+            base(space, name, new List<object>(), BubbleType.SPACE, scope)
+        { }
 
-        public Space(Space space, string name,List<object> inside, ScopeType scope = 0)
+        public Space(Box space, string name, List<object> inside, ScopeType scope = 0)
             : base(space, name, inside, BubbleType.SPACE, scope)
-        => space.GetType();
+        { }
+
+        public Space(Space space, string name, ScopeType scope = 0)
+            : base(space, name, new List<object>(), BubbleType.SPACE, scope)
+        { }
+
+        public Space(Space space, string name, List<object> inside, ScopeType scope = 0)
+            : base(space, name, inside, BubbleType.SPACE, scope)
+        { }
+
+        public Space( string name, ScopeType scope = 0)
+            : base( name, new List<object>(), BubbleType.SPACE, scope)
+        {}
+
+        public Space(string name, List<object> inside, ScopeType scope = 0)
+            : base(name, inside, BubbleType.SPACE, scope)
+        { }
 
         public Space CreateRootSpace(string name) => new Space(name);
     }
 
     public class Class : Box
     {
+        public string BaseClass = "Root";//by default make this 'object'/'box' type/box
 
-        public Class(Box b) : base(b, new List<BubbleType> { BubbleType.SPACE, BubbleType.FILE }) {}
+        public override string ToString()
+        {
+            string[] basestring = base.ToString().Split(':',2);
+            return basestring[0] + " Inherits '" + BaseClass + "' :" + basestring[1];
+        }
+
+            public Class(Box b) : base(b, new List<BubbleType> { BubbleType.SPACE, BubbleType.FILE }) {}
 
         public Class(Space space,string name, ScopeType scope = 0)
             : base(space, name, new List<Object>(), BubbleType.CLASS, scope)

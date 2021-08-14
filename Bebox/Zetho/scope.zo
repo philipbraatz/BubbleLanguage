@@ -1,0 +1,32 @@
+﻿public space testing{
+	public class publicClass from hereIam{
+		public methods{
+			function publicfunction(){
+				accessable.by.andclassinstance.abcde.efghij.lmno
+			//this is a test comment
+			}
+
+			static function staticfunction(){
+				accessable.by.anythinguptoprivate
+			}
+		}
+	}
+	/* multiline
+	   comments
+	   are cool */
+
+
+	private class privateclass{
+		public methods{
+
+			function mypublicfunction(){
+				this.isnot.accecible.outsidethisscope
+				but.thisclass.instance.cancall.thisfunc
+			}
+
+			function myprivatefunction(){
+				thisis.notaccecible.outsidethisclass
+			}
+		}
+	}
+}

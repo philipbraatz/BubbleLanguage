@@ -4,6 +4,8 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <LangVersion>7.1</LangVersion>
+    <RootNamespace>Doorfail.Bebox</RootNamespace>
+    <AssemblyName>Doorfail.Bebox</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -26,6 +28,12 @@
   <ItemGroup>
     <Reference Include="System">
       <HintPath>System</HintPath>
+    </Reference>
+    <Reference Include="System.Data">
+      <HintPath>System.Data</HintPath>
+    </Reference>
+    <Reference Include="System.Xml">
+      <HintPath>System.Xml</HintPath>
     </Reference>
   </ItemGroup>
 

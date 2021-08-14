@@ -6,7 +6,7 @@ grammar Bubbles;
  /*
  bubble_file : bubble_decleration*
  */
-scope_type: PUBLIC | PRIVATE | INTERNAL;
+scope_type: PUBLIC | PRIVATE | PROTECTED;
 
 bubble_type : SPACE | CLASS | INTERFACE | FUNCTION | CONSTRUCTOR;
 
@@ -37,48 +37,57 @@ using
 
 space_decleration : 	
 	scope_type? SPACE NAME?
-	(':' structure? imports )? (as_type (',' as_type)*)? '{' 
+	(as_type (',' as_type)*)? (':' structure? imports )?  '{' 
 		   (space_decleration | class_decleration | interface_decleration | function_decleration)*
 	'}';
 
 class_decleration :
 	scope_type? CLASS NAME
-	(':' structure? imports )? (as_type (',' as_type)*)? '{' 
+	inherit_class?
+	'{' 
 		   (constructor_bubble | property_bubble | methods_bubble )*
 	'}';
 	
 interface_decleration :
 	scope_type? INTERFACE NAME
-	(':' structure? imports )? (as_type (',' as_type)*)? '{' 
+	(as_type (',' as_type)*)? (':' structure? imports )? '{' 
 		   (constructor_bubble | property_bubble | methods_bubble )*
 	'}';
 
 function_decleration :
-	scope_type? return_values? FUNCTION NAME
-	(':' structure? imports )? '(' (param (',' param)*)? ')' '{' 
-		   code_lines?
+	return_values? FUNCTION NAME
+	parameters? (':' structure? as_type )?  '{' 
+		   code_line*
 	'}';
 
-constructor_bubble : CONSTRUCTOR NAME? '{' '}';
-property_bubble: scope_type PROPERTY NAME? as_type? '{' '}';
-methods_bubble: scope_type METHOD NAME? as_type? '{' '}';
+constructor_decleration: CONSTRUCTOR
+	( param | '(' (param (',' param)*)? ')')? (':' structure? imports )? '{' 
+		   code_line*
+	'}';
+property_decleration: CLASS_NAME NAME (':' expression)?;/*TODO create property logic*/
+
+constructor_bubble : scope_type CONSTRUCTOR NAME? '{' constructor_decleration* '}';
+property_bubble: scope_type PROPERTY NAME? as_type? '{' property_decleration* '}';
+methods_bubble: scope_type METHOD NAME? as_type? '{' function_decleration* '}';
 	
 
 structure:  '<' NAME (','NAME)* '>';
-imports: (USING | FROM) import_name (','import_name)*;
-import_name: class_name ('#'  NAME)?;
-parameters: '('((param',')* param)?')';
+imports: (USING | 'from') import_name (','import_name)*;
+import_name: CLASS_NAME ('#'  NAME)?;
+parameters:  '(' (param (',' param)*)? ')';
 param: NAME NAME ('=' NAME)?;
-return_values: ('[' NAME (','NAME)* ']') | NAME;
+return_values: VOID | NAME | ('[' NAME (','NAME)* ']');
 
-class_name: NAME ('.' NAME)*;
+inherit_class: 'from' CLASS_NAME;
+
 code_line: expression;
 code_lines: code_line+;
 
 expression: 
 	expression (MULT | DIVIDE) expression
 	| expression (ADD | SUB) expression
-	| class_name
+	| RETURN expression
+	| CLASS_NAME
 	;
 
 /*
@@ -86,6 +95,9 @@ expression:
  */
  /*
  */
+
+COMMENT : '//' ~[\r\n]* -> channel(HIDDEN);
+COMMENTS : '/*' (options {greedy=false;} : .* ) '*/' -> channel(HIDDEN);
 WS  : (' '|'\t'|'\r'|'\n')+ -> skip;
 
 
@@ -102,7 +114,7 @@ PROPERTY: 'properties' | 'property' | 'prop';
 
 PUBLIC: 'public' | 'pub';
 PRIVATE: 'private' | 'pvt';
-INTERNAL: 'internal' | 'inl';
+PROTECTED: 'protected' | 'prot';
 
 STATIC: 'static' | 'tic';
 EVENT: 'event' | 'ent';
@@ -111,7 +123,9 @@ ASYNC: 'asyncronous' | 'async' | 'ac';
 /*End Bubbles*/
 
 USING: 'using' | 'use';
-FROM: 'FROM';
+
+RETURN: 'return' | '=>';
+VOID: 'void' | 'null' | '_';
 
 /*Operators*/
 
@@ -181,5 +195,7 @@ NUMBER
 
 
 NAME : [a-z] ([a-z] | [0-9])*;
+
+CLASS_NAME:  [a-z] ([a-z] | [0-9] | '.')*;
 
 STRING: '"' .*? '"';
